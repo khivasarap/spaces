@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:date_range_picker/date_range_picker.dart' as DateRagePicker;
+
 //99% of work will be done here, to be platform independent
 void main() => runApp(MaterialApp(home: SpaceHome()));
 //"StatelessWidget" enables hot reload forest and makes our code reusable
 class SpaceHome extends StatelessWidget {
+  DateTime _startDate = DateTime.now();
+  DateTime _endDate = DateTime.now().add(Duration(days: 7));
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -140,6 +145,52 @@ class SpaceHome extends StatelessWidget {
                   ),
                 ],
               ),
+            ),
+            new MaterialButton(
+                color: Colors.lightBlueAccent,
+                onPressed: () async {
+                  final List<DateTime> picked = await DateRagePicker.showDatePicker(
+                      context: context,
+                      initialFirstDate: new DateTime.now(),
+                      initialLastDate: (new DateTime.now()).add(new Duration(days: 7)),
+                      firstDate: new DateTime(2015),
+                      lastDate: new DateTime(2030)
+                  );
+                  if (picked != null && picked.length == 2) {
+                    _startDate = picked[0];
+                    _endDate = picked[1];
+                    print(picked);
+                  }
+                  },
+                child: new Text("Pick date range")
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                Text(
+                  'StartDate:${_startDate}',
+                  style: TextStyle(
+                    fontSize: 20.0,
+                    letterSpacing: 1.0,
+                    color: Colors.grey,
+                  ),
+                ),
+                //Text("End Date: ${DateFormat('MM/dd/yyyy').format(_endDate).toString()}"),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                Text(
+                  'EndDate:${_endDate}',
+                  style: TextStyle(
+                    fontSize: 20.0,
+                    letterSpacing: 1.0,
+                    color: Colors.grey,
+                  ),
+                ),
+                //Text("End Date: ${DateFormat('MM/dd/yyyy').format(_endDate).toString()}"),
+              ],
             ),
             SizedBox(
               height: 40.0,
